@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Localisation Portfolio — Will Clegg</title>
+<style>
+:root {
+  --bg: #f5f2ee;
+  --bg-card: #ffffff;
+  --text: #1a1a1a;
+  --text-secondary: #5a5550;
+  --accent: #c4362c;
+  --border: #e0dbd5;
+  --tag-bg: #eae6e0;
+  --tag-text: #6b6560;
+  --hero-bg: #1c2028;
+  --hero-text: #f0ece6;
+  --hero-sub: #a8a29e;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141618; --bg-card: #1e2024; --text: #e8e4de; --text-secondary: #9a958e;
+    --accent: #e05a50; --border: #2e3038; --tag-bg: #2a2c32; --tag-text: #9a958e;
+    --hero-bg: #0c0e12; --hero-text: #e8e4de; --hero-sub: #78736c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141618; --bg-card: #1e2024; --text: #e8e4de; --text-secondary: #9a958e;
+  --accent: #e05a50; --border: #2e3038; --tag-bg: #2a2c32; --tag-text: #9a958e;
+  --hero-bg: #0c0e12; --hero-text: #e8e4de; --hero-sub: #78736c; color-scheme: dark;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+.hero {
+  background: var(--hero-bg); color: var(--hero-text);
+  padding: 80px 24px 72px; text-align: center;
+}
+.hero h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 400;
+  letter-spacing: -0.01em; line-height: 1.15; text-wrap: balance; margin-bottom: 16px;
+}
+.hero .subtitle { font-size: 1.05rem; color: var(--hero-sub); max-width: 560px; margin: 0 auto 28px; }
+.hero .contact {
+  font-size: 0.88rem; color: var(--hero-sub);
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 20px;
+}
+.hero .contact a { color: var(--hero-sub); text-decoration: none; }
+.hero .contact a:hover { color: var(--hero-text); }
+.intro { max-width: 680px; margin: 0 auto; padding: 56px 24px 40px; font-size: 1.02rem; color: var(--text-secondary); }
+.intro p + p { margin-top: 12px; }
+
+/* Section headings for year groups / categories */
+.section-heading {
+  max-width: 1100px; margin: 0 auto; padding: 48px 24px 16px;
+}
+.section-heading h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.6rem; font-weight: 400; color: var(--text);
+}
+.section-heading .section-sub {
+  font-size: 0.92rem; color: var(--text-secondary); margin-top: 4px;
+}
+.section-heading .section-rule {
+  width: 48px; height: 2px; background: var(--accent); margin-top: 12px; border-radius: 1px;
+}
+
+.games { max-width: 1100px; margin: 0 auto; padding: 0 24px 24px; display: flex; flex-direction: column; gap: 40px; }
+.game {
+  display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: start;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px;
+}
+.game-art { width: 100%; border-radius: 8px; overflow: hidden; background: var(--tag-bg); aspect-ratio: 3 / 4; }
+.game-art img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: top center; }
+.game-art.coming-soon {
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--hero-bg), #2a2c34);
+}
+.game-art.coming-soon span {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.1rem; color: var(--hero-sub); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.game-info h3 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.4rem; font-weight: 400; line-height: 1.25; margin-bottom: 2px;
+}
+.game-info .cn-title { font-size: 1rem; color: var(--text-secondary); margin-bottom: 10px; }
+.game-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tag {
+  display: inline-block; background: var(--tag-bg); color: var(--tag-text);
+  font-size: 0.78rem; font-weight: 500; padding: 3px 10px; border-radius: 20px; white-space: nowrap;
+}
+.game-info .description { font-size: 0.94rem; color: var(--text-secondary); margin-bottom: 14px; }
+.game-info .credits { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.65; }
+.credits strong { color: var(--text); font-weight: 500; }
+.highlights { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.84rem; color: var(--text-secondary); }
+.highlights .label { font-weight: 600; color: var(--accent); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+
+/* NetEase banner */
+.employer-banner {
+  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+}
+.employer-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 28px 32px; margin-bottom: 8px;
+}
+.employer-card h3 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.3rem; font-weight: 400; margin-bottom: 6px;
+}
+.employer-card .role { font-size: 0.95rem; color: var(--accent); font-weight: 500; margin-bottom: 8px; }
+.employer-card .employer-desc { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.65; }
+.employer-card .employer-desc ul { margin-top: 8px; padding-left: 20px; }
+.employer-card .employer-desc li { margin-bottom: 4px; }
+
+.footer { text-align: center; padding: 40px 24px; font-size: 0.84rem; color: var(--text-secondary); border-top: 1px solid var(--border); }
+.footer a { color: var(--accent); text-decoration: none; }
+
+@media print {
+  .hero { background: #1c2028 !important; color: #f0ece6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .hero .subtitle, .hero .contact, .hero .contact a { color: #a8a29e !important; }
+  .game { break-inside: avoid; page-break-inside: avoid; }
+  .game-art img { loading: eager; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tag { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+@media (max-width: 700px) {
+  .game { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+  .game-art { max-width: 240px; }
+  .hero { padding: 56px 20px 48px; }
+  .intro { padding: 40px 20px 28px; }
+  .games { padding: 0 16px 24px; gap: 32px; }
+  .section-heading { padding: 40px 16px 12px; }
+  .employer-banner { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Game Localisation Portfolio</h1>
+  <p class="subtitle">Chinese&ndash;English game localisation and LQA across mobile, PC, and console. Approximately eight years of experience working with leading Chinese studios.</p>
+  <div class="contact">
+    <span>Will Clegg</span>
+    <span>Chinese to English</span>
+    <span>WeChat: +86 186215 37176</span>
+    <span>WhatsApp: +44 7436 899599</span>
+    <a href="https://www.linkedin.com/in/william-clegg-629455a0/">LinkedIn</a>
+  </div>
+</header>
+
+<section class="intro">
+  <p>A selection of games I have localised or provided language quality assurance for, working with some of China&rsquo;s largest studios and publishers. My work spans AAA mobile titles, PC RPGs, strategy games, and casual party games, with a focus on Chinese-to-English translation, LQA, and cultural adaptation.</p>
+  <p>I hold an MA in Translation Studies (with distinction) from the University of Birmingham, and lived and worked in China for over fifteen years before returning to the UK.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- GAMES BY YEAR                              -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="section-heading">
+  <h2>2026</h2>
+  <div class="section-rule"></div>
+</div>
+
+<section class="games">
+
+  <!-- Aniimo -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/aniimo.png" alt="Aniimo key art">
+    </div>
+    <div class="game-info">
+      <h3>Aniimo</h3>
+      <div class="game-meta">
+        <span class="tag">Creature-Collecting ARPG</span>
+        <span class="tag">PC / Console / Mobile</span>
+        <span class="tag">2026</span>
+        <span class="tag">Pawprint Studio</span>
+      </div>
+      <p class="description">A free-to-play open-world creature-collecting action RPG set in the fantasy continent of Idyll. Players capture, evolve, and battle alongside unique creatures called Aniimo in a vibrant, fully explorable world with real-time combat.</p>
+      <div class="credits">
+        <strong>Developer:</strong> Pawprint Studio (FunPlus)<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        Announced at Xbox Games Showcase 2025 &middot; Global launch Sep 2026 &middot; Cross-platform PC, PS5, Xbox Series X|S, iOS &amp; Android
+      </div>
+    </div>
+  </article>
+
+  <!-- Windrose -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/windrose.png" alt="Windrose key art">
+    </div>
+    <div class="game-info">
+      <h3>Windrose</h3>
+      <div class="game-meta">
+        <span class="tag">Pirate Survival</span>
+        <span class="tag">PC (Steam / Epic)</span>
+        <span class="tag">2026</span>
+        <span class="tag">Kraken Express</span>
+      </div>
+      <p class="description">A co-op pirate survival game set in a vast open ocean, blending naval combat, base-building, and exploration. Players crew ships, plunder islands, and battle rival factions across a shared persistent world.</p>
+      <div class="credits">
+        <strong>Developer:</strong> Kraken Express<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        2M+ copies sold within first month &middot; 222K peak concurrent Steam players &middot; &ldquo;Very Positive&rdquo; Steam reviews
+      </div>
+    </div>
+  </article>
+
+  <!-- Tides of Annihilation -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/tides-of-annihilation.png" alt="Tides of Annihilation key art">
+    </div>
+    <div class="game-info">
+      <h3>Tides of Annihilation</h3>
+      <div class="cn-title">灭世之潮</div>
+      <div class="game-meta">
+        <span class="tag">Action Adventure</span>
+        <span class="tag">PC / PS5 / Xbox Series X|S</span>
+        <span class="tag">2026</span>
+        <span class="tag">Eclipse Glow Games</span>
+      </div>
+      <p class="description">A single-player action-adventure inspired by Arthurian mythology, set in a neo-medieval vision of London devastated by an otherworldly invasion. Players take on the role of Gwendolyn, wielding four weapon types across 30+ hours of fast-paced combat and boss encounters.</p>
+      <div class="credits">
+        <strong>Developer:</strong> Eclipse Glow Games (Chengdu)<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        Announced at PlayStation State of Play (Feb 2025) &middot; Playable demo at Gamescom 2026 &middot; Unreal Engine 5
+      </div>
+    </div>
+  </article>
+
+  <!-- Unannounced NetEase Open-World Title -->
+  <article class="game">
+    <div class="game-art coming-soon">
+      <span>Coming Soon</span>
+    </div>
+    <div class="game-info">
+      <h3>Unannounced Title</h3>
+      <div class="game-meta">
+        <span class="tag">Open-World Action RPG</span>
+        <span class="tag">PC / PS5 / Mobile</span>
+        <span class="tag">TBA</span>
+        <span class="tag">NetEase Games</span>
+      </div>
+      <p class="description">Localisation work on an upcoming open-world action RPG set in a modern urban fantasy setting, with anime-inspired visuals and fast-paced combat. Full details under NDA.</p>
+      <div class="credits">
+        <strong>Publisher:</strong> NetEase Games<br>
+        <strong>Role:</strong> Translation
+      </div>
+    </div>
+  </article>
+
+  <!-- Unannounced Tencent Title -->
+  <article class="game">
+    <div class="game-art coming-soon">
+      <span>Coming Soon</span>
+    </div>
+    <div class="game-info">
+      <h3>Unannounced Title</h3>
+      <div class="game-meta">
+        <span class="tag">Eastern Fantasy RPG</span>
+        <span class="tag">PC / Mobile</span>
+        <span class="tag">TBA</span>
+        <span class="tag">Tencent Games</span>
+      </div>
+      <p class="description">Localisation work on an unannounced Eastern fantasy RPG published by Tencent Games. Full details under NDA.</p>
+      <div class="credits">
+        <strong>Publisher:</strong> Tencent Games<br>
+        <strong>Role:</strong> Translation
+      </div>
+    </div>
+  </article>
+
+</section>
+
+<div class="section-heading">
+  <h2>2025</h2>
+  <div class="section-rule"></div>
+</div>
+
+<section class="games">
+
+  <!-- Sword of Justice -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/sword-of-justice.png" alt="Sword of Justice key art">
+    </div>
+    <div class="game-info">
+      <h3>Sword of Justice</h3>
+      <div class="cn-title">逆水寒</div>
+      <div class="game-meta">
+        <span class="tag">Open-World Wuxia MMORPG</span>
+        <span class="tag">PC / Mobile</span>
+        <span class="tag">2025</span>
+        <span class="tag">NetEase Games</span>
+      </div>
+      <p class="description">A next-generation open-world wuxia MMORPG set during the final days of the Northern Song Dynasty, featuring AI-powered NPCs, dynamic weather, and a vast martial arts world. Adapted from Wen Rui&rsquo;an&rsquo;s <em>The Four Great Constables</em>.</p>
+      <div class="credits">
+        <strong>Developer:</strong> ZhuRong Studio (NetEase Games)<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        40M+ players in first month (China) &middot; Global launch Nov 2025 &middot; 5M+ pre-registrations &middot; AI-powered NPC system (DeepSeek)
+      </div>
+    </div>
+  </article>
+
+</section>
+
+<div class="section-heading">
+  <h2>2022</h2>
+  <div class="section-rule"></div>
+</div>
+
+<section class="games">
+
+  <!-- Frozen City -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/frozen-city.png" alt="Frozen City key art">
+    </div>
+    <div class="game-info">
+      <h3>Frozen City</h3>
+      <div class="game-meta">
+        <span class="tag">Survival / City Builder</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2022</span>
+        <span class="tag">Century Games</span>
+      </div>
+      <p class="description">A post-apocalyptic survival city-builder set in a frozen wasteland. Players manage resources, assign survivors to roles, and rebuild civilisation while battling extreme cold and dwindling supplies.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> Century Games<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+    </div>
+  </article>
+
+  <!-- Dislyte -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/dislyte.png" alt="Dislyte key art">
+    </div>
+    <div class="game-info">
+      <h3>Dislyte</h3>
+      <div class="cn-title">神觉者</div>
+      <div class="game-meta">
+        <span class="tag">Turn-Based RPG</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2022</span>
+        <span class="tag">Lilith Games</span>
+      </div>
+      <p class="description">A stylish urban-mythological RPG set in a neon-soaked near-future where ancient gods manifest in modern heroes. Features a distinctive hip-hop and electronic soundtrack with turn-based combat inspired by mythology from cultures around the world.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> Lilith Games<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        Global launch May 2022 &middot; Featured on App Store &amp; Google Play &middot; Distinctive art direction blending mythology with street culture
+      </div>
+    </div>
+  </article>
+
+</section>
+
+<div class="section-heading">
+  <h2>2021</h2>
+  <div class="section-rule"></div>
+</div>
+
+<section class="games">
+
+  <!-- The Scroll of Taiwu -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/scroll-of-taiwu.png" alt="The Scroll of Taiwu key art">
+    </div>
+    <div class="game-info">
+      <h3>The Scroll of Taiwu</h3>
+      <div class="cn-title">太吾绘卷</div>
+      <div class="game-meta">
+        <span class="tag">Wuxia Sandbox RPG</span>
+        <span class="tag">PC (Steam)</span>
+        <span class="tag">2018&ndash;2026</span>
+        <span class="tag">ConchShip Games</span>
+      </div>
+      <p class="description">An ambitious open-world wuxia RPG that simulates an entire martial-arts world with procedurally generated characters, clans, and storylines. Players forge their own path through a richly detailed jianghu, mastering kung fu styles and navigating complex social dynamics.</p>
+      <div class="credits">
+        <strong>Developer:</strong> ConchShip Technology<br>
+        <strong>Publisher:</strong> ConchShip Games<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        3.4M+ players on Steam &middot; Top seller in China at Early Access launch (2018) &middot; Full v1.0 release 2026 &middot; &ldquo;Overwhelmingly Positive&rdquo; Steam reviews
+      </div>
+    </div>
+  </article>
+
+  <!-- The Moonlit Oath -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/moonlit-oath.png" alt="The Moonlit Oath key art">
+    </div>
+    <div class="game-info">
+      <h3>The Moonlit Oath</h3>
+      <div class="cn-title">花亦山心之月</div>
+      <div class="game-meta">
+        <span class="tag">Otome / Visual Novel RPG</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2021</span>
+        <span class="tag">Nuverse</span>
+      </div>
+      <p class="description">A historical romance RPG set in a fictional ancient Chinese academy, blending visual-novel storytelling with card-based combat. Players navigate court intrigue, academic rivalry, and romantic relationships in a richly illustrated world.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> Nuverse (ByteDance)<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+    </div>
+  </article>
+
+</section>
+
+<div class="section-heading">
+  <h2>2017&ndash;2021</h2>
+  <div class="section-rule"></div>
+</div>
+
+<section class="games">
+
+  <!-- AFK Arena -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/afk-arena.png" alt="AFK Arena key art">
+    </div>
+    <div class="game-info">
+      <h3>AFK Arena</h3>
+      <div class="cn-title">剑与远征</div>
+      <div class="game-meta">
+        <span class="tag">Idle RPG</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2019</span>
+        <span class="tag">Lilith Games</span>
+      </div>
+      <p class="description">Lilith&rsquo;s flagship idle RPG featuring a vast roster of heroes across seven factions. Combines accessible idle mechanics with deep strategic team-building, narrative campaigns, and competitive PvP modes.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> Lilith Games<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        50M+ downloads worldwide &middot; One of the highest-grossing idle RPGs globally &middot; Ongoing live-service content
+      </div>
+    </div>
+  </article>
+
+  <!-- Rise of Kingdoms -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/rise-of-kingdoms.png" alt="Rise of Kingdoms key art">
+    </div>
+    <div class="game-info">
+      <h3>Rise of Kingdoms</h3>
+      <div class="cn-title">万国觉醒</div>
+      <div class="game-meta">
+        <span class="tag">Real-Time Strategy</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2018</span>
+        <span class="tag">Lilith Games</span>
+      </div>
+      <p class="description">A massively multiplayer real-time strategy game where players build civilisations, train armies, and forge alliances across a shared open world. Features thirteen historical civilisations, each with unique commanders and units.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> Lilith Games<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        70M+ downloads &middot; Top-grossing strategy title across multiple markets &middot; Localised into 20+ languages
+      </div>
+    </div>
+  </article>
+
+  <!-- Warpath -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/warpath.png" alt="Warpath key art">
+    </div>
+    <div class="game-info">
+      <h3>Warpath</h3>
+      <div class="game-meta">
+        <span class="tag">Military Strategy</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2020</span>
+        <span class="tag">Lilith Games</span>
+      </div>
+      <p class="description">A WWII-themed military strategy game featuring real-time tactical combat on an open battlefield. Players command historically inspired units including tanks, infantry, and artillery across a persistent campaign map.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> Lilith Games<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+    </div>
+  </article>
+
+  <!-- Art of Conquest -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/art-of-conquest.png" alt="Art of Conquest key art">
+    </div>
+    <div class="game-info">
+      <h3>Art of Conquest</h3>
+      <div class="cn-title">艺术征服</div>
+      <div class="game-meta">
+        <span class="tag">Fantasy Strategy RPG</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2017</span>
+        <span class="tag">Lilith Games</span>
+      </div>
+      <p class="description">A fantasy strategy RPG combining base-building, hero collection, and large-scale PvP battles. Players choose from five distinct races and compete for territory across a shared server-wide map.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> Lilith Games<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+    </div>
+  </article>
+
+  <!-- Family Farm Adventure -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/family-farm-adventure.png" alt="Family Farm Adventure key art">
+    </div>
+    <div class="game-info">
+      <h3>Family Farm Adventure</h3>
+      <div class="game-meta">
+        <span class="tag">Adventure / Farming Sim</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2021</span>
+        <span class="tag">Century Games</span>
+      </div>
+      <p class="description">A tropical farming adventure combining exploration, puzzle-solving, and farm management on a mysterious island. Players uncover hidden stories and restore the island while growing crops and raising animals.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> Century Games<br>
+        <strong>Role:</strong> Translation / LQA
+      </div>
+    </div>
+  </article>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- NETEASE GAMES — FULL-TIME ROLE             -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="section-heading">
+  <h2>NetEase Games</h2>
+  <div class="section-sub">Full-time &mdash; Senior LQA Test Engineer (Oct 2022&ndash;Nov 2024)</div>
+  <div class="section-rule"></div>
+</div>
+
+<div class="employer-banner">
+  <div class="employer-card">
+    <h3>NetEase Games &mdash; Shanghai</h3>
+    <div class="role">Senior LQA Test Engineer</div>
+    <div class="employer-desc">
+      Full-time position at one of China&rsquo;s largest games developers and publishers, overseeing localisation quality assurance across multiple titles, platforms, and markets.
+      <ul>
+        <li>Acted as first contact for NetEase&rsquo;s overseas launch titles, working with multicultural teams to formulate and execute localisation proofreading tasks at different stages.</li>
+        <li>Conducted in-depth checks of localised functions, language translation, interface layout, and local culture issues.</li>
+        <li>Conducted comprehensive assessments of textual and cultural quality risks, promoting continuous improvement of product localisation quality.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<section class="games">
+
+  <!-- Lord of the Rings: Rise to War -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/lotr-rise-to-war.png" alt="Lord of the Rings: Rise to War key art">
+    </div>
+    <div class="game-info">
+      <h3>The Lord of the Rings: Rise to War</h3>
+      <div class="cn-title">指环王：崛起之战</div>
+      <div class="game-meta">
+        <span class="tag">Geo-Strategic Wargame</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2021</span>
+        <span class="tag">NetEase &times; Warner Bros.</span>
+      </div>
+      <p class="description">An officially licensed geo-strategic mobile game set in Middle-earth, combining territory control, army management, and real-time alliance warfare across a faithful recreation of Tolkien&rsquo;s world.</p>
+      <div class="credits">
+        <strong>Developer:</strong> NetEase Games<br>
+        <strong>Licence:</strong> Warner Bros. Interactive Entertainment<br>
+        <strong>Role:</strong> LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        Official Tolkien licence &middot; Global launch Sep 2021 &middot; Featured on App Store &amp; Google Play
+      </div>
+    </div>
+  </article>
+
+  <!-- Harry Potter: Magic Awakened -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/harry-potter-magic-awakened.png" alt="Harry Potter: Magic Awakened key art">
+    </div>
+    <div class="game-info">
+      <h3>Harry Potter: Magic Awakened</h3>
+      <div class="cn-title">哈利·波特：魔法觉醒</div>
+      <div class="game-meta">
+        <span class="tag">CCG / RPG</span>
+        <span class="tag">Mobile / PC</span>
+        <span class="tag">2021&ndash;2023</span>
+        <span class="tag">NetEase &times; Warner Bros.</span>
+      </div>
+      <p class="description">A card-collecting RPG set at Hogwarts, blending deck-building strategy with action combat and an open-world social experience. Players attend classes, duel with spell cards, and explore an immersive recreation of the Wizarding World.</p>
+      <div class="credits">
+        <strong>Developer:</strong> NetEase Games<br>
+        <strong>Licence:</strong> Warner Bros. Interactive Entertainment<br>
+        <strong>Role:</strong> LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        China launch 2021, global launch June 2023 &middot; Top-grossing in multiple markets at launch &middot; Cross-platform mobile &amp; PC
+      </div>
+    </div>
+  </article>
+
+  <!-- Onmyoji -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/onmyoji.png" alt="Onmyoji key art">
+    </div>
+    <div class="game-info">
+      <h3>Onmyoji</h3>
+      <div class="cn-title">阴阳师</div>
+      <div class="game-meta">
+        <span class="tag">Turn-Based RPG</span>
+        <span class="tag">Mobile / PC</span>
+        <span class="tag">2016</span>
+        <span class="tag">NetEase Games</span>
+      </div>
+      <p class="description">NetEase&rsquo;s flagship title set in Heian-era Japan, where players collect and command shikigami spirits in tactical turn-based battles. Known for its lavish art direction, deep lore drawn from Japanese folklore, and one of the largest mobile gaming communities in Asia.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> NetEase Games<br>
+        <strong>Role:</strong> LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        200M+ downloads worldwide &middot; Spawned anime, film, and spin-off games &middot; One of China&rsquo;s top-grossing mobile games
+      </div>
+    </div>
+  </article>
+
+  <!-- Eggy Party -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/eggy-party.png" alt="Eggy Party key art">
+    </div>
+    <div class="game-info">
+      <h3>Eggy Party</h3>
+      <div class="cn-title">蛋仔派对</div>
+      <div class="game-meta">
+        <span class="tag">Party / Battle Royale</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2022</span>
+        <span class="tag">NetEase Games</span>
+      </div>
+      <p class="description">A massively popular casual party game featuring obstacle courses, mini-games, and user-generated content. Players compete as customisable egg characters in colourful, physics-driven challenges &mdash; often compared to <em>Fall Guys</em> but with deep UGC tools.</p>
+      <div class="credits">
+        <strong>Developer / Publisher:</strong> NetEase Games<br>
+        <strong>Role:</strong> LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        500M+ registered players &middot; China&rsquo;s most popular party game &middot; Extensive user-generated content ecosystem
+      </div>
+    </div>
+  </article>
+
+  <!-- Lovebrush Chronicles -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/lovebrush-chronicles.png" alt="Lovebrush Chronicles key art">
+    </div>
+    <div class="game-info">
+      <h3>Lovebrush Chronicles</h3>
+      <div class="cn-title">恋与深空</div>
+      <div class="game-meta">
+        <span class="tag">Otome / 3D Romance</span>
+        <span class="tag">Mobile</span>
+        <span class="tag">2020&ndash;2024</span>
+        <span class="tag">NetEase &times; Infold Games</span>
+      </div>
+      <p class="description">A premium 3D otome romance adventure set in a sci-fi world of &ldquo;deepspace&rdquo; encounters. Known for its cinematic production values, motion-captured character interactions, and emotionally driven narrative branching.</p>
+      <div class="credits">
+        <strong>Developer:</strong> Infold Games (Paper Games)<br>
+        <strong>Publisher:</strong> Infold Games<br>
+        <strong>Role:</strong> LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        China launch 2020, global launch Jan 2024 &middot; Highest single-day revenue for an otome game globally &middot; AAA-grade 3D production
+      </div>
+    </div>
+  </article>
+
+  <!-- Diablo Immortal -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/diablo.png" alt="Diablo key art">
+    </div>
+    <div class="game-info">
+      <h3>Diablo Immortal</h3>
+      <div class="game-meta">
+        <span class="tag">Action RPG</span>
+        <span class="tag">Mobile / PC</span>
+        <span class="tag">2022</span>
+        <span class="tag">NetEase &times; Blizzard</span>
+      </div>
+      <p class="description">The mobile entry in Blizzard&rsquo;s iconic action-RPG franchise, co-developed by NetEase. Set between <em>Diablo II</em> and <em>Diablo III</em>, the game brings the series&rsquo; signature dark fantasy and loot-driven gameplay to mobile and PC with MMO-scale multiplayer.</p>
+      <div class="credits">
+        <strong>Developer:</strong> NetEase Games &amp; Blizzard Entertainment<br>
+        <strong>Role:</strong> LQA
+      </div>
+      <div class="highlights">
+        <div class="label">Highlights</div>
+        Co-developed with Blizzard Entertainment &middot; 30M+ downloads in first month &middot; Cross-platform mobile &amp; PC
+      </div>
+    </div>
+  </article>
+
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- OTHER LOCALISATION PROJECTS                -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="section-heading">
+  <h2>Other Localisation Projects</h2>
+  <div class="section-sub">AI &amp; technology</div>
+  <div class="section-rule"></div>
+</div>
+
+<section class="games" style="padding-bottom:60px;">
+
+  <!-- Kimi AI -->
+  <article class="game">
+    <div class="game-art">
+      <img src="img/kimi-ai.png" alt="Kimi AI">
+    </div>
+    <div class="game-info">
+      <h3>Kimi AI</h3>
+      <div class="game-meta">
+        <span class="tag">AI Assistant</span>
+        <span class="tag">Web / Mobile</span>
+        <span class="tag">2024</span>
+        <span class="tag">Moonshot AI</span>
+      </div>
+      <p class="description">UI and product localisation for Kimi, the flagship AI assistant from Moonshot AI (月之暗面), one of China&rsquo;s leading AI startups. Work covered interface strings, user-facing copy, and product documentation for the international release.</p>
+      <div class="credits">
+        <strong>Developer:</strong> Moonshot AI<br>
+        <strong>Role:</strong> CN&rarr;EN UI Localisation
+      </div>
+    </div>
+  </article>
+
+</section>
+
+<footer class="footer">
+  <p>Will Clegg &middot; Chinese&ndash;English Game Localisation &amp; LQA &middot; <a href="https://www.linkedin.com/in/william-clegg-629455a0/">LinkedIn</a></p>
+  <p style="margin-top:8px;font-size:0.78rem;">Portfolio updated November 2026</p>
+</footer>
+
+</body>
+</html>
